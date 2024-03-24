@@ -30,17 +30,17 @@ const router = createRouter({
         {
           path: '/admin',
           name: 'dashboard',
-          component: () => import('../views/admin/DashbaordPage.vue'),
+          component: () => import('../views/admin/dashbaord/DashbaordPage.vue'),
         },
         {
           path: '/create-post',
           name: 'create-post',
-          component: () => import('../views/admin/CreatePostPage.vue'),
+          component: () => import('../views/admin/createPost/CreatePostPage.vue'),
         },
         {
           path: '/post-lists',
           name: 'psot-lists',
-          component: () => import('../views/admin/PostListPage.vue'),
+          component: () => import('../views/admin/postList/PostListPage.vue'),
         },
       ]
     },

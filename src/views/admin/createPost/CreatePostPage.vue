@@ -5,10 +5,12 @@ import { RouterLink, RouterView } from 'vue-router'
 import { useVuelidate } from '@vuelidate/core'
 import { required, email } from '@vuelidate/validators'
 import Error from '@/components/Error.vue'
-import type { ICreatePostInput } from './admin-types'
 import { createPostHttp } from './actions/CreatePost'
 import { showError, successMsg } from '@/helper/Toastnotifcation'
 import BaseBtn from '@/components/BaseBtn.vue'
+import type { ICreatePostInput } from './types/createPost.types'
+
+
 const postInput = ref<ICreatePostInput>({
   title: '',
   post_content: ''

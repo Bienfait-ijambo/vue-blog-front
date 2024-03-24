@@ -1,6 +1,6 @@
 import { APP } from "@/shared/App";
 import { verifyToken } from "@/helper/verifyToken";
-import type { IPostList } from "../admin-types";
+import type { IPostList } from "../../admin-types";
 
 
  export type GetPostResponseType={

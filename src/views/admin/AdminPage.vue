@@ -52,7 +52,7 @@ onMounted(async () => {
         <div class="collapse navbar-collapse" id="navbarText">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">Dashboard</a>
+              <RouterLink class="nav-link" aria-current="page" to="/admin">Dashbaord</RouterLink>
             </li>
             <li class="nav-item" style="font-weight: bold">
               <RouterLink class="nav-link" to="/create-post">Create-post</RouterLink>

@@ -1,6 +1,6 @@
 import { APP } from "@/shared/App";
-import type { ICreatePostInput } from "../admin-types";
 import { verifyToken } from "@/helper/verifyToken";
+import type { ICreatePostInput } from "../types/createPost.types";
 
  export type PostResponseType={
    
