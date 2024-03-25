@@ -10,6 +10,9 @@ import { confirmDelation } from '@/helper/SweetAlert'
 import { successMsg } from '@/helper/Toastnotifcation'
 import PostTable from './components/PostTable.vue'
 import UploadImageModal from './components/UploadImageModal.vue'
+import { IEditPostDataInput } from './types/postList-types'
+import { postStore } from '@/stores/admin/postStore'
+import { useRouter } from 'vue-router'
 const posts = ref<GetPostResponseType>()
 
 const query = ref<string>('')
@@ -45,6 +48,15 @@ async function showModal(postId:number){
   
 }
 
+const router=useRouter()
+function editPostData(postData:IEditPostDataInput){
+ postStore.editPostData.id=postData.id
+ postStore.editPostData.title=postData.title
+ postStore.editPostData.post_content=postData.post_content
+ postStore.editPost.edit=true
+ router.push('/create-post')
+
+}
 
 
 onMounted(async () => {
@@ -78,6 +90,7 @@ onMounted(async () => {
      <PostTable 
      :posts="posts" 
      @deletePost="deletePost"
+     @editPost="editPostData"
      @showModal="showModal"
      />
 

@@ -10,6 +10,8 @@ import { showError, successMsg } from '@/helper/Toastnotifcation'
 import BaseBtn from '@/components/BaseBtn.vue'
 import type { ICreatePostInput } from './types/createPost.types'
 
+import {postStore} from '@/stores/admin/postStore'
+
 
 const postInput = ref<ICreatePostInput>({
   title: '',
@@ -44,6 +46,8 @@ async function createPost() {
   showError(error.message)
  }
 }
+
+
 </script>
 
 <template>
@@ -51,7 +55,7 @@ async function createPost() {
     <div class="col-md-2"></div>
     <div class="col-md-6">
       <div class="card">
-        <div class="card-header">Create post Form</div>
+        <div class="card-header">Create post Form {{ postStore.editPostData }} </div>
         <!-- {{ registerInput }} -->
         <div class="card-body">
           <form action="" @submit.prevent="createPost">
@@ -67,7 +71,9 @@ async function createPost() {
             <RouterLink to="/post-lists">See list of posts</RouterLink>
             <br />
             <div class="form-group">
-             <BaseBtn label="Create post" :loading="loadingStatus"/>
+             <BaseBtn 
+             label="Create post" 
+             :loading="loadingStatus"/>
             </div>
           </form>
         </div>
