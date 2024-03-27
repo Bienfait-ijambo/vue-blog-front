@@ -2,7 +2,6 @@
 import { onMounted, ref } from 'vue'
 import { getPostHttp } from './actions/GetPostList'
 import { deletePostHttp } from './actions/DeletePost'
-
 import type { GetPostResponseType } from './actions/GetPostList'
 import { closeModal, myDebounce, openModal } from '@/helper/util'
 import { Bootstrap4Pagination } from 'laravel-vue-pagination'
@@ -13,6 +12,7 @@ import UploadImageModal from './components/UploadImageModal.vue'
 import { IEditPostDataInput } from './types/postList-types'
 import { postStore } from '@/stores/admin/postStore'
 import { useRouter } from 'vue-router'
+
 const posts = ref<GetPostResponseType>()
 
 const query = ref<string>('')
@@ -48,12 +48,15 @@ async function showModal(postId:number){
   
 }
 
-const router=useRouter()
+
+ const router=useRouter()
+
 function editPostData(postData:IEditPostDataInput){
  postStore.editPostData.id=postData.id
  postStore.editPostData.title=postData.title
  postStore.editPostData.post_content=postData.post_content
  postStore.editPost.edit=true
+
  router.push('/create-post')
 
 }

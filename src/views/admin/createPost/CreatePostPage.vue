@@ -1,21 +1,23 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterLink, RouterView, useRouter } from 'vue-router'
 
 import { useVuelidate } from '@vuelidate/core'
-import { required, email } from '@vuelidate/validators'
+import { required } from '@vuelidate/validators'
 import Error from '@/components/Error.vue'
 import { createPostHttp } from './actions/CreatePost'
+import {updatePostHttp} from './actions/UpdatePost'
 import { showError, successMsg } from '@/helper/Toastnotifcation'
 import BaseBtn from '@/components/BaseBtn.vue'
 import type { ICreatePostInput } from './types/createPost.types'
-
 import {postStore} from '@/stores/admin/postStore'
+import { IUpdatePostInput } from './types/updatePost.types'
 
 
-const postInput = ref<ICreatePostInput>({
-  title: '',
-  post_content: ''
+const postInput = ref<ICreatePostInput|IUpdatePostInput>({
+  id:postStore.editPostData.id,
+  title: postStore.editPostData.title,
+  post_content: postStore.editPostData.post_content,
 })
 
 const rules = {
@@ -26,19 +28,20 @@ const rules = {
 const loadingStatus=ref(false)
 
 const v$ = useVuelidate(rules, postInput)
+const router=useRouter()
 
-async function createPost() {
+async function createOrUpdatePost() {
   const result = await v$.value.$validate()
-
   if (!result) return
 
  try {
   loadingStatus.value=true
-  const data=await createPostHttp(postInput.value)
-  //type assertion
-  postInput.value={} as ICreatePostInput
+  
+  postStore.editPost.edit ?
+  await updatePost():
+  await createPost()
+
   v$.value.$reset()
-  successMsg(data.message)
   loadingStatus.value=false
 
  } catch (error:any) {
@@ -46,6 +49,27 @@ async function createPost() {
   showError(error.message)
  }
 }
+
+
+async function createPost(){
+  const data=await createPostHttp(postInput.value)
+  postInput.value={} as ICreatePostInput
+  successMsg(data.message)
+}
+
+
+async function updatePost(){
+  const data=await updatePostHttp(postInput.value  as IUpdatePostInput)
+  postStore.editPostData={} as IUpdatePostInput
+  postInput.value={} as ICreatePostInput
+  postStore.editPost.edit=false
+  router.push('/post-lists')
+  successMsg(data.message)
+}
+
+
+
+
 
 
 </script>
@@ -58,7 +82,7 @@ async function createPost() {
         <div class="card-header">Create post Form {{ postStore.editPostData }} </div>
         <!-- {{ registerInput }} -->
         <div class="card-body">
-          <form action="" @submit.prevent="createPost">
+          <form action="" @submit.prevent="createOrUpdatePost">
             <Error inputLabel="Title" :formErrors="v$.title.$errors">
               <input type="text" v-model="postInput.title" class="form-control" />
             </Error>
@@ -71,8 +95,10 @@ async function createPost() {
             <RouterLink to="/post-lists">See list of posts</RouterLink>
             <br />
             <div class="form-group">
+              
              <BaseBtn 
-             label="Create post" 
+             :class="postStore.editPost.edit ? 'btn-warning':'btn-primary'"
+             :label="postStore.editPost.edit ? 'Update Post':'Create post'" 
              :loading="loadingStatus"/>
             </div>
           </form>
